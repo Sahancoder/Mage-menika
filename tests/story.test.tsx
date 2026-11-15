@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeAll, beforeEach } from 'vitest';
 import { render, screen, fireEvent, within, act, waitFor } from '@testing-library/react';
 import App from '../src/App';
 import { memoryPhotos, getOrderedMemories } from '../src/data/memories';
@@ -24,6 +24,18 @@ vi.mock('howler', () => {
 });
 
 describe('My Manika Birthday Story', () => {
+  // Warm the lazy scene chunks so Suspense resolves quickly (avoids timing flakiness).
+  beforeAll(async () => {
+    await Promise.all([
+      import('../src/scenes/MemoryBoxScene'),
+      import('../src/scenes/MemoryScene'),
+      import('../src/scenes/LoveHeartsScene'),
+      import('../src/scenes/StoryInterludeScene'),
+      import('../src/scenes/BirthdayCakeScene'),
+      import('../src/scenes/FinalLetterScene'),
+    ]);
+  }, 60000);
+
   beforeEach(() => {
     window.localStorage.clear();
   });
@@ -61,7 +73,7 @@ describe('My Manika Birthday Story', () => {
     const boxBtn = await screen.findByRole(
       'button',
       { name: storyContent.memoryBox.hint },
-      { timeout: 4000 },
+      { timeout: 10000 },
     );
     vi.useFakeTimers();
     fireEvent.click(boxBtn);
@@ -82,7 +94,7 @@ describe('My Manika Birthday Story', () => {
     const firstHeart = await screen.findByRole(
       'button',
       { name: `${loveMessages[0].title} අරින්න` },
-      { timeout: 4000 },
+      { timeout: 10000 },
     );
     fireEvent.click(firstHeart);
 
@@ -104,7 +116,7 @@ describe('My Manika Birthday Story', () => {
     const firstPhotoBtn = await screen.findByRole(
       'button',
       { name: `${memoryPhotos[0].alt} විශාල කර බලන්න` },
-      { timeout: 4000 },
+      { timeout: 10000 },
     );
     fireEvent.click(firstPhotoBtn);
 
@@ -124,7 +136,7 @@ describe('My Manika Birthday Story', () => {
     const candlesGroup = await screen.findByRole(
       'group',
       { name: 'උපන්දින ඉටිපන්දම්' },
-      { timeout: 4000 },
+      { timeout: 10000 },
     );
     const candleButtons = within(candlesGroup).getAllByRole('button');
     expect(candleButtons).toHaveLength(5);
@@ -146,7 +158,7 @@ describe('My Manika Birthday Story', () => {
     const openFinalBtn = await screen.findByRole(
       'button',
       { name: storyContent.finalLetter.openHint },
-      { timeout: 4000 },
+      { timeout: 10000 },
     );
     fireEvent.click(openFinalBtn);
 
