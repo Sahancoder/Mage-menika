@@ -13,7 +13,7 @@ export const loveMessages: LoveMessage[] = [
   {
     id: 'heart-02',
     title: 'දෙවන සටහන',
-    message: 'මැණිකේ, ඔයා එක්ක කතා කරන වෙලාව මට හරිම වටිනවා.',
+    message: 'මැණික, ඔයා එක්ක කතා කරන වෙලාව මට හරිම වටිනවා.',
   },
   {
     id: 'heart-03',

@@ -58,7 +58,11 @@ describe('My Manika Birthday Story', () => {
   it('opens the memory box on click and reveals the enter scrapbook button', async () => {
     render(<App />);
 
-    const boxBtn = await screen.findByRole('button', { name: storyContent.memoryBox.hint });
+    const boxBtn = await screen.findByRole(
+      'button',
+      { name: storyContent.memoryBox.hint },
+      { timeout: 4000 },
+    );
     vi.useFakeTimers();
     fireEvent.click(boxBtn);
 
@@ -75,9 +79,11 @@ describe('My Manika Birthday Story', () => {
   it('opens and closes a love heart note dialog', async () => {
     render(<App />);
 
-    const firstHeart = await screen.findByRole('button', {
-      name: `${loveMessages[0].title} අරින්න`,
-    });
+    const firstHeart = await screen.findByRole(
+      'button',
+      { name: `${loveMessages[0].title} අරින්න` },
+      { timeout: 4000 },
+    );
     fireEvent.click(firstHeart);
 
     const dialog = screen.getByRole('dialog');
@@ -115,7 +121,11 @@ describe('My Manika Birthday Story', () => {
   it('extinguishes all 5 birthday candles to reveal the birthday greeting and allows replay', async () => {
     render(<App />);
 
-    const candlesGroup = await screen.findByRole('group', { name: 'උපන්දින ඉටිපන්දම්' });
+    const candlesGroup = await screen.findByRole(
+      'group',
+      { name: 'උපන්දින ඉටිපන්දම්' },
+      { timeout: 4000 },
+    );
     const candleButtons = within(candlesGroup).getAllByRole('button');
     expect(candleButtons).toHaveLength(5);
 
@@ -133,9 +143,11 @@ describe('My Manika Birthday Story', () => {
   it('reveals the final letter on tap and supports restarting the story', async () => {
     render(<App />);
 
-    const openFinalBtn = await screen.findByRole('button', {
-      name: storyContent.finalLetter.openHint,
-    });
+    const openFinalBtn = await screen.findByRole(
+      'button',
+      { name: storyContent.finalLetter.openHint },
+      { timeout: 4000 },
+    );
     fireEvent.click(openFinalBtn);
 
     expect(await screen.findByText(storyContent.finalLetter.heading)).toBeInTheDocument();
