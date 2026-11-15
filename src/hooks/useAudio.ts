@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Howl, Howler } from 'howler';
 
-export type SoundEffect = 'envelope' | 'paper' | 'note' | 'chime';
+export type SoundEffect = 'envelope' | 'note' | 'chime';
 
-const EFFECTS: SoundEffect[] = ['envelope', 'paper', 'note', 'chime'];
+const EFFECTS: SoundEffect[] = ['envelope', 'note', 'chime'];
 const PREFERENCE_KEY = 'story-audio-enabled';
 const MUSIC_VOLUME = 0.28;
 const FADE_MS = 600;

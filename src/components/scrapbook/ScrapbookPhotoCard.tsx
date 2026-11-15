@@ -20,15 +20,15 @@ export function ScrapbookPhotoCard({
   onOpen,
 }: ScrapbookPhotoCardProps) {
   const [failed, setFailed] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   const rotation = ROTATIONS[index % ROTATIONS.length];
-  const eager = index < 2;
 
   return (
     <motion.figure
-      initial={{ opacity: 0, y: 26, rotate: rotation * 1.4 }}
+      initial={{ opacity: 0, y: 20, rotate: rotation * 1.15 }}
       whileInView={{ opacity: 1, y: 0, rotate: rotation }}
-      viewport={{ once: true, amount: 0.18 }}
-      transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
+      viewport={{ once: true, amount: 0.08 }}
+      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
       className={`group relative mx-auto w-full ${
         variant === 'polaroid'
           ? 'max-w-[22rem]'
@@ -59,11 +59,14 @@ export function ScrapbookPhotoCard({
             <img
               src={photo.src}
               alt={photo.alt}
-              loading={eager ? 'eager' : 'lazy'}
+              loading="lazy"
               decoding="async"
+              onLoad={() => setLoaded(true)}
               onError={() => setFailed(true)}
               style={{ objectPosition: photo.focalPoint ?? 'center top' }}
-              className="w-full h-auto max-h-[68dvh] object-contain block mx-auto transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+              className={`w-full h-auto max-h-[68dvh] object-contain block mx-auto transition-all duration-700 ease-out group-hover:scale-[1.02] ${
+                loaded ? 'opacity-100' : 'opacity-0'
+              }`}
             />
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center text-[#764d45]/75 bg-[#f4e8d3]">

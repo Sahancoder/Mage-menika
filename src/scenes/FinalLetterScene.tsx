@@ -173,9 +173,11 @@ export function FinalLetterScene({ onRestart, replayKey }: FinalLetterSceneProps
                 </div>
               )}
 
-              <p className="mt-8 text-right text-base sm:text-lg font-medium text-[#764d45]">
-                {finalLetter.signature}
-              </p>
+              {finalLetter.signature && (
+                <p className="mt-8 text-right text-base sm:text-lg font-medium text-[#764d45]">
+                  {finalLetter.signature}
+                </p>
+              )}
 
               <div className="mt-10 pt-6 border-t border-[#a67c52]/25 flex justify-center">
                 <button

@@ -4,7 +4,7 @@ export interface FinalSurpriseConfig {
   openHint: string;
   heading: string;
   paragraphs: string[];
-  signature: string;
+  signature?: string;
   /** Optional hidden gift note shown inside a small keepsake card */
   hiddenGiftMessage?: string;
   /** Optional path to a final photo in /public/images/ */
@@ -95,7 +95,6 @@ export const storyContent = {
       'අද වගේම හැමදාමත් ඔයා සතුටින්, නිරෝගීව, හිනාවෙලා ඉන්න ඕනේ කියලා මම හදවතින්ම ප්‍රාර්ථනා කරනවා.',
       'මගේ මැණිකට හැමදාමත් මම ඉන්නවා. ගොඩක් ආදරෙයි!',
     ],
-    signature: 'සදාකාලික ආදරයෙන් — ඔයාගේම',
     hiddenGiftMessage: 'මගේ මැණිකට දෙන පුංචි තෑග්ග: හැමදාම ඔයාගේ හිනාව රැකගන්න මම ඔයා ළඟින්ම ඉන්නවා. ♡',
     // Optional personal media (uncomment & add file in /public/ to enable):
     // finalPhotoSrc: '/images/memories/WhatsApp%20Image%202026-11-15%20at%2020.09.59.jpeg',

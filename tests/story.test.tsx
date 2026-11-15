@@ -55,27 +55,29 @@ describe('My Manika Birthday Story', () => {
     expect(screen.getByRole('button', { name: /Disable music/i })).toBeInTheDocument();
   });
 
-  it('opens the memory box on click and reveals the enter scrapbook button', () => {
-    vi.useFakeTimers();
+  it('opens the memory box on click and reveals the enter scrapbook button', async () => {
     render(<App />);
 
-    const boxBtn = screen.getByRole('button', { name: storyContent.memoryBox.hint });
+    const boxBtn = await screen.findByRole('button', { name: storyContent.memoryBox.hint });
+    vi.useFakeTimers();
     fireEvent.click(boxBtn);
 
     act(() => {
       vi.advanceTimersByTime(650);
     });
+    vi.useRealTimers();
 
     expect(
       screen.getByRole('button', { name: storyContent.memoryBox.enterScrapbookLabel }),
     ).toBeInTheDocument();
-    vi.useRealTimers();
   });
 
   it('opens and closes a love heart note dialog', async () => {
     render(<App />);
 
-    const firstHeart = screen.getByRole('button', { name: `${loveMessages[0].title} අරින්න` });
+    const firstHeart = await screen.findByRole('button', {
+      name: `${loveMessages[0].title} අරින්න`,
+    });
     fireEvent.click(firstHeart);
 
     const dialog = screen.getByRole('dialog');
@@ -93,9 +95,11 @@ describe('My Manika Birthday Story', () => {
   it('opens a scrapbook photo in the lightbox and closes it', async () => {
     render(<App />);
 
-    const firstPhotoBtn = screen.getByRole('button', {
-      name: `${memoryPhotos[0].alt} විශාල කර බලන්න`,
-    });
+    const firstPhotoBtn = await screen.findByRole(
+      'button',
+      { name: `${memoryPhotos[0].alt} විශාල කර බලන්න` },
+      { timeout: 4000 },
+    );
     fireEvent.click(firstPhotoBtn);
 
     const dialog = screen.getByRole('dialog');
@@ -108,10 +112,10 @@ describe('My Manika Birthday Story', () => {
     });
   });
 
-  it('extinguishes all 5 birthday candles to reveal the birthday greeting and allows replay', () => {
+  it('extinguishes all 5 birthday candles to reveal the birthday greeting and allows replay', async () => {
     render(<App />);
 
-    const candlesGroup = screen.getByRole('group', { name: 'උපන්දින ඉටිපන්දම්' });
+    const candlesGroup = await screen.findByRole('group', { name: 'උපන්දින ඉටිපන්දම්' });
     const candleButtons = within(candlesGroup).getAllByRole('button');
     expect(candleButtons).toHaveLength(5);
 
@@ -129,11 +133,12 @@ describe('My Manika Birthday Story', () => {
   it('reveals the final letter on tap and supports restarting the story', async () => {
     render(<App />);
 
-    const openFinalBtn = screen.getByRole('button', { name: storyContent.finalLetter.openHint });
+    const openFinalBtn = await screen.findByRole('button', {
+      name: storyContent.finalLetter.openHint,
+    });
     fireEvent.click(openFinalBtn);
 
     expect(await screen.findByText(storyContent.finalLetter.heading)).toBeInTheDocument();
-    expect(screen.getByText(storyContent.finalLetter.signature)).toBeInTheDocument();
 
     const restartBtn = screen.getByRole('button', { name: storyContent.finalLetter.restartLabel });
     fireEvent.click(restartBtn);

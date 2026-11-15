@@ -1,17 +1,33 @@
-
-import { useState } from 'react';
+import { Suspense, lazy, useState } from 'react';
 import { MotionConfig } from 'motion/react';
 import { AudioControl } from './components/AudioControl';
 import { StoryProgress } from './components/ui/StoryProgress';
 import { useStoryNavigation } from './hooks/useStoryNavigation';
 import { IntroScene } from './scenes/IntroScene';
 import { FirstLetterScene } from './scenes/FirstLetterScene';
-import { MemoryBoxScene } from './scenes/MemoryBoxScene';
-import { MemoryScene } from './scenes/MemoryScene';
-import { LoveHeartsScene } from './scenes/LoveHeartsScene';
-import { StoryInterludeScene } from './scenes/StoryInterludeScene';
-import { BirthdayCakeScene } from './scenes/BirthdayCakeScene';
-import { FinalLetterScene } from './scenes/FinalLetterScene';
+
+const MemoryBoxScene = lazy(() =>
+  import('./scenes/MemoryBoxScene').then((m) => ({ default: m.MemoryBoxScene })),
+);
+const MemoryScene = lazy(() =>
+  import('./scenes/MemoryScene').then((m) => ({ default: m.MemoryScene })),
+);
+const LoveHeartsScene = lazy(() =>
+  import('./scenes/LoveHeartsScene').then((m) => ({ default: m.LoveHeartsScene })),
+);
+const StoryInterludeScene = lazy(() =>
+  import('./scenes/StoryInterludeScene').then((m) => ({ default: m.StoryInterludeScene })),
+);
+const BirthdayCakeScene = lazy(() =>
+  import('./scenes/BirthdayCakeScene').then((m) => ({ default: m.BirthdayCakeScene })),
+);
+const FinalLetterScene = lazy(() =>
+  import('./scenes/FinalLetterScene').then((m) => ({ default: m.FinalLetterScene })),
+);
+
+function SceneFallback() {
+  return <div className="min-h-[35dvh] w-full" aria-hidden="true" />;
+}
 
 export function App() {
   const [replayKey, setReplayKey] = useState(0);
@@ -57,29 +73,41 @@ export function App() {
 
           <FirstLetterScene onContinue={() => goToScene('memory-box')} />
 
-          <MemoryBoxScene
-            replayKey={replayKey}
-            onEnterScrapbook={() => goToScene('memories')}
-          />
+          <Suspense fallback={<SceneFallback />}>
+            <MemoryBoxScene
+              replayKey={replayKey}
+              onEnterScrapbook={() => goToScene('memories')}
+            />
+          </Suspense>
 
-          <MemoryScene onContinue={() => goToScene('love-hearts')} />
+          <Suspense fallback={<SceneFallback />}>
+            <MemoryScene onContinue={() => goToScene('love-hearts')} />
+          </Suspense>
 
-          <LoveHeartsScene
-            replayKey={replayKey}
-            onContinue={() => goToScene('interlude')}
-          />
+          <Suspense fallback={<SceneFallback />}>
+            <LoveHeartsScene
+              replayKey={replayKey}
+              onContinue={() => goToScene('interlude')}
+            />
+          </Suspense>
 
-          <StoryInterludeScene onContinue={() => goToScene('birthday')} />
+          <Suspense fallback={<SceneFallback />}>
+            <StoryInterludeScene onContinue={() => goToScene('birthday')} />
+          </Suspense>
 
-          <BirthdayCakeScene
-            replayKey={replayKey}
-            onContinue={() => goToScene('final-letter')}
-          />
+          <Suspense fallback={<SceneFallback />}>
+            <BirthdayCakeScene
+              replayKey={replayKey}
+              onContinue={() => goToScene('final-letter')}
+            />
+          </Suspense>
 
-          <FinalLetterScene
-            replayKey={replayKey}
-            onRestart={handleRestart}
-          />
+          <Suspense fallback={<SceneFallback />}>
+            <FinalLetterScene
+              replayKey={replayKey}
+              onRestart={handleRestart}
+            />
+          </Suspense>
         </main>
       </div>
     </MotionConfig>
