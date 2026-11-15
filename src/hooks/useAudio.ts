@@ -27,6 +27,7 @@ type AudioSession = {
   effects: Partial<Record<SoundEffect, Howl>>;
   failedEffects: Set<SoundEffect>;
   pauseTimer?: ReturnType<typeof setTimeout>;
+  musicId?: number;
   startMusic: () => void;
 };
 
@@ -86,12 +87,15 @@ export function useAudio() {
       startMusic: () => {
         if (disposed || !enabledRef.current || !authorizedRef.current || document.hidden) return;
         const music = session.music;
-        if (!music || music.playing()) return;
+        if (!music) return;
+        // Reuse ONE sound id: every bare play() would otherwise spawn a new overlapping instance.
+        if (session.musicId !== undefined && music.playing(session.musicId)) return;
         if (music.state() === 'unloaded') return;
         clearTimeout(session.pauseTimer);
-        music.volume(0);
-        music.play();
-        music.fade(0, MUSIC_VOLUME, FADE_MS);
+        const id = session.musicId === undefined ? music.play() : music.play(session.musicId);
+        session.musicId = id;
+        music.volume(0, id);
+        music.fade(0, MUSIC_VOLUME, FADE_MS, id);
       },
     };
 
