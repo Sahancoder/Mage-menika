@@ -119,7 +119,6 @@ export function StoryInterludeScene({ onContinue }: StoryInterludeSceneProps) {
           <button
             type="button"
             onClick={() => {
-              window.dispatchEvent(new CustomEvent('story-sound', { detail: 'paper' }));
               onContinue();
             }}
             className="vintage-btn vintage-btn--dark"

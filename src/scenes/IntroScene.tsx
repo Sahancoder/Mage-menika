@@ -30,12 +30,10 @@ export function IntroScene({ onOpenComplete, replayKey }: IntroSceneProps) {
 
   const handleOpenEnvelope = () => {
     if (stage !== 'idle') return;
-    window.dispatchEvent(new CustomEvent('story-sound', { detail: 'envelope' }));
     setStage('breaking');
 
     window.setTimeout(() => {
       setStage('opened');
-      window.dispatchEvent(new CustomEvent('story-sound', { detail: 'paper' }));
     }, 450);
 
     window.setTimeout(() => {
@@ -99,7 +97,7 @@ export function IntroScene({ onOpenComplete, replayKey }: IntroSceneProps) {
 
         <h1
           id="intro-headline"
-          className="text-2xl sm:text-4xl font-semibold text-[#fff9f0] leading-relaxed mb-10 drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)]"
+          className="text-2xl sm:text-4xl font-semibold text-[#fff9f0] leading-relaxed mb-24 sm:mb-28 drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)]"
         >
           {storyContent.intro.headline}
         </h1>
@@ -114,11 +112,11 @@ export function IntroScene({ onOpenComplete, replayKey }: IntroSceneProps) {
           whileTap={stage === 'idle' ? { scale: 0.985 } : undefined}
           animate={
             stage === 'opened'
-              ? { scale: 1.08, y: -14, opacity: 0.92 }
+              ? { scale: 1.04, y: 0, opacity: 0.95 }
               : { scale: 1, y: 0, opacity: 1 }
           }
           transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
-          className="group relative w-[min(90vw,23rem)] aspect-[1.45/1] cursor-pointer focus-visible:outline-2 focus-visible:outline-[#e5b6aa] focus-visible:outline-offset-8 disabled:cursor-default bg-transparent border-0 p-0 text-left"
+          className="group relative z-10 w-[min(90vw,23rem)] aspect-[1.45/1] cursor-pointer focus-visible:outline-2 focus-visible:outline-[#e5b6aa] focus-visible:outline-offset-8 disabled:cursor-default bg-transparent border-0 p-0 text-left"
         >
           {/* Ambient candle glow behind envelope */}
           <span
@@ -134,7 +132,7 @@ export function IntroScene({ onOpenComplete, replayKey }: IntroSceneProps) {
               initial={{ y: 8, opacity: 0.9 }}
               animate={
                 stage === 'opened'
-                  ? { y: -76, opacity: 1, scale: 1.03 }
+                  ? { y: -58, opacity: 1, scale: 1.02 }
                   : stage === 'breaking'
                     ? { y: -12, opacity: 1 }
                     : { y: 8, opacity: 0.92 }

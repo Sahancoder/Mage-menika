@@ -32,7 +32,6 @@ export function LoveHeartsScene({ onContinue, replayKey }: LoveHeartsSceneProps)
   }, [selectedNote]);
 
   const openHeart = (item: LoveMessage) => {
-    window.dispatchEvent(new CustomEvent('story-sound', { detail: 'note' }));
     setSelectedNote(item);
     setOpenedIds((prev) => (prev.includes(item.id) ? prev : [...prev, item.id]));
   };
@@ -117,7 +116,6 @@ export function LoveHeartsScene({ onContinue, replayKey }: LoveHeartsSceneProps)
           <button
             type="button"
             onClick={() => {
-              window.dispatchEvent(new CustomEvent('story-sound', { detail: 'paper' }));
               onContinue();
             }}
             className="vintage-btn"

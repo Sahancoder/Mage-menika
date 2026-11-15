@@ -75,9 +75,6 @@ function BirthdayCake({ onContinue }: { onContinue?: () => void }) {
     if (extinguished.current.has(index)) return;
     extinguished.current.add(index);
     setOff([...extinguished.current]);
-    if (extinguished.current.size === CANDLES.length) {
-      window.dispatchEvent(new CustomEvent("story-sound", { detail: "chime" }));
-    }
   }
 
   function replay() {
@@ -181,7 +178,6 @@ function BirthdayCake({ onContinue }: { onContinue?: () => void }) {
               type="button"
               className="vintage-btn"
               onClick={() => {
-                window.dispatchEvent(new CustomEvent("story-sound", { detail: "paper" }));
                 onContinue();
               }}
               lang="si"

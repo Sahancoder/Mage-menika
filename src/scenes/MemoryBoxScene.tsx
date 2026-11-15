@@ -19,12 +19,10 @@ export function MemoryBoxScene({ onEnterScrapbook, replayKey }: MemoryBoxScenePr
 
   const handleOpenBox = () => {
     if (boxState !== 'closed') return;
-    window.dispatchEvent(new CustomEvent('story-sound', { detail: 'paper' }));
     setBoxState('opening');
 
     window.setTimeout(() => {
       setBoxState('open');
-      window.dispatchEvent(new CustomEvent('story-sound', { detail: 'note' }));
     }, 520);
   };
 
@@ -40,20 +38,20 @@ export function MemoryBoxScene({ onEnterScrapbook, replayKey }: MemoryBoxScenePr
         </p>
         <h2
           id="memory-box-title"
-          className="text-2xl sm:text-4xl font-semibold text-[#fff9f0] mb-10"
+          className="text-2xl sm:text-4xl font-semibold text-[#fff9f0] mb-6"
         >
           {storyContent.memoryBox.label}
         </h2>
 
         {/* Antique Keepsake Box */}
-        <div className="relative w-[min(86vw,22rem)] h-64 sm:h-72 flex items-end justify-center">
+        <div className="relative mt-28 sm:mt-32 w-[min(86vw,22rem)] h-64 sm:h-72 flex items-end justify-center">
           {/* Rising Photo from inside the box */}
           {firstPhoto && (
             <motion.div
               initial={{ y: 40, scale: 0.72, opacity: 0, rotate: -4 }}
               animate={
                 boxState === 'open'
-                  ? { y: -62, scale: 1.06, opacity: 1, rotate: -2 }
+                  ? { y: -44, scale: 1, opacity: 1, rotate: -2 }
                   : boxState === 'opening'
                     ? { y: 12, scale: 0.85, opacity: 0.6, rotate: -3 }
                     : { y: 40, scale: 0.72, opacity: 0, rotate: -4 }
@@ -91,10 +89,10 @@ export function MemoryBoxScene({ onEnterScrapbook, replayKey }: MemoryBoxScenePr
               animate={
                 boxState === 'closed'
                   ? { y: 0, rotateX: 0 }
-                  : { y: -38, rotateX: -58, opacity: 0.9 }
+                  : { y: -20, rotateX: -80, opacity: 0 }
               }
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute inset-x-0 top-0 h-14 z-30 rounded-md bg-gradient-to-b from-[#6a4347] to-[#4e2f33] border border-[#c89983]/50 shadow-lg flex items-center justify-center"
+              className="absolute inset-x-0 top-0 h-14 z-10 rounded-md bg-gradient-to-b from-[#6a4347] to-[#4e2f33] border border-[#c89983]/50 shadow-lg flex items-center justify-center"
             >
               {/* Horizontal Dusty Rose Ribbon on lid */}
               <span
@@ -141,7 +139,6 @@ export function MemoryBoxScene({ onEnterScrapbook, replayKey }: MemoryBoxScenePr
               <button
                 type="button"
                 onClick={() => {
-                  window.dispatchEvent(new CustomEvent('story-sound', { detail: 'paper' }));
                   onEnterScrapbook();
                 }}
                 className="vintage-btn"

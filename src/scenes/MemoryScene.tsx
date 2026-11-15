@@ -119,7 +119,6 @@ export function MemoryScene({ onContinue }: MemorySceneProps) {
                         index={index}
                         variant="paired"
                         onOpen={(idx) => {
-                          window.dispatchEvent(new CustomEvent('story-sound', { detail: 'paper' }));
                           setLightboxIndex(idx);
                         }}
                       />
@@ -132,7 +131,6 @@ export function MemoryScene({ onContinue }: MemorySceneProps) {
                       index={spread.items[0].index}
                       variant={spread.variant}
                       onOpen={(idx) => {
-                        window.dispatchEvent(new CustomEvent('story-sound', { detail: 'paper' }));
                         setLightboxIndex(idx);
                       }}
                     />
@@ -148,7 +146,6 @@ export function MemoryScene({ onContinue }: MemorySceneProps) {
           <button
             type="button"
             onClick={() => {
-              window.dispatchEvent(new CustomEvent('story-sound', { detail: 'paper' }));
               onContinue();
             }}
             className="vintage-btn"

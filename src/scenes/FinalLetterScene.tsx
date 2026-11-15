@@ -22,11 +22,7 @@ export function FinalLetterScene({ onRestart, replayKey }: FinalLetterSceneProps
 
   const handleOpenFinal = () => {
     if (opened) return;
-    window.dispatchEvent(new CustomEvent('story-sound', { detail: 'envelope' }));
     setOpened(true);
-    window.setTimeout(() => {
-      window.dispatchEvent(new CustomEvent('story-sound', { detail: 'chime' }));
-    }, 350);
   };
 
   return (
@@ -153,7 +149,6 @@ export function FinalLetterScene({ onRestart, replayKey }: FinalLetterSceneProps
                     <button
                       type="button"
                       onClick={() => {
-                        window.dispatchEvent(new CustomEvent('story-sound', { detail: 'note' }));
                         setGiftRevealed(true);
                       }}
                       className="vintage-btn !min-h-[42px] !px-5 !py-2 text-sm"
@@ -183,7 +178,6 @@ export function FinalLetterScene({ onRestart, replayKey }: FinalLetterSceneProps
                 <button
                   type="button"
                   onClick={() => {
-                    window.dispatchEvent(new CustomEvent('story-sound', { detail: 'paper' }));
                     onRestart();
                   }}
                   className="vintage-btn"

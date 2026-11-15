@@ -58,13 +58,12 @@ describe('My Manika Birthday Story', () => {
     }
   });
 
-  it('renders opening headline, first letter, and audio control', () => {
+  it('renders opening headline and first letter', () => {
     render(<App />);
     expect(screen.getByText(storyContent.intro.headline)).toBeInTheDocument();
     expect(
       screen.getByRole('heading', { name: storyContent.firstLetter.salutation }),
     ).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Disable music/i })).toBeInTheDocument();
   });
 
   it('opens the memory box on click and reveals the enter scrapbook button', async () => {

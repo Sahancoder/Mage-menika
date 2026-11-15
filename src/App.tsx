@@ -1,6 +1,6 @@
 import { Suspense, lazy, useState } from 'react';
 import { MotionConfig } from 'motion/react';
-import { AudioControl } from './components/AudioControl';
+import { useBackgroundMusic } from './hooks/useAudio';
 import { StoryProgress } from './components/ui/StoryProgress';
 import { useStoryNavigation } from './hooks/useStoryNavigation';
 import { IntroScene } from './scenes/IntroScene';
@@ -30,6 +30,7 @@ function SceneFallback() {
 }
 
 export function App() {
+  useBackgroundMusic();
   const [replayKey, setReplayKey] = useState(0);
   const {
     activeScene,
@@ -54,8 +55,6 @@ export function App() {
         >
           ප්‍රධාන කතාවට යන්න
         </a>
-
-        <AudioControl />
 
         <StoryProgress
           activeScene={activeScene}

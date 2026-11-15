@@ -49,7 +49,6 @@ export function FirstLetterScene({ onContinue }: FirstLetterSceneProps) {
   const { firstLetter } = storyContent;
 
   const handleContinue = () => {
-    window.dispatchEvent(new CustomEvent('story-sound', { detail: 'paper' }));
     onContinue();
   };
 
