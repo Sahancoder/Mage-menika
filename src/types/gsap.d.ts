@@ -1,13 +1,17 @@
 declare module 'gsap' {
   const gsap: {
-    registerPlugin: (...plugins: unknown[]) => void;
+    registerPlugin: (...plugins: object[]) => void;
     matchMedia: () => {
       add: (query: string, cb: () => void) => void;
       revert: () => void;
     };
-    context: (cb: () => void, scope?: unknown) => { revert: () => void };
+    context: (cb: () => void, scope?: object | string | null) => { revert: () => void };
     timeline: (vars?: Record<string, unknown>) => {
-      from: (target: string, vars: Record<string, unknown>, position?: number) => ReturnType<typeof gsap.timeline>;
+      from: (
+        target: string,
+        vars: Record<string, unknown>,
+        position?: number,
+      ) => ReturnType<typeof gsap.timeline>;
     };
     to: (target: string, vars: Record<string, unknown>) => void;
   };
@@ -15,6 +19,5 @@ declare module 'gsap' {
 }
 
 declare module 'gsap/ScrollTrigger' {
-  export const ScrollTrigger: unknown;
+  export const ScrollTrigger: Record<string, unknown>;
 }
-
