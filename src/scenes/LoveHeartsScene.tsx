@@ -192,3 +192,4 @@ export function LoveHeartsScene({ onContinue, replayKey }: LoveHeartsSceneProps)
     </section>
   );
 }
+

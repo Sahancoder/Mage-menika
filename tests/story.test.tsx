@@ -52,7 +52,7 @@ describe('My Manika Birthday Story', () => {
     expect(
       screen.getByRole('heading', { name: storyContent.firstLetter.salutation }),
     ).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Enable music/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Disable music/i })).toBeInTheDocument();
   });
 
   it('opens the memory box on click and reveals the enter scrapbook button', () => {

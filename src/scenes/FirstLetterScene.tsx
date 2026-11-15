@@ -136,3 +136,4 @@ export function FirstLetterScene({ onContinue }: FirstLetterSceneProps) {
     </section>
   );
 }
+

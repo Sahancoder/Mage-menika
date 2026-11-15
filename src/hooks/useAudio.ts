@@ -5,14 +5,16 @@ export type SoundEffect = 'envelope' | 'paper' | 'note' | 'chime';
 
 const EFFECTS: SoundEffect[] = ['envelope', 'paper', 'note', 'chime'];
 const PREFERENCE_KEY = 'story-audio-enabled';
-const MUSIC_VOLUME = 0.22;
+const MUSIC_VOLUME = 0.28;
 const FADE_MS = 600;
 
 function readPreference(): boolean {
   try {
-    return typeof window !== 'undefined' && window.localStorage.getItem(PREFERENCE_KEY) === 'true';
+    if (typeof window === 'undefined') return true;
+    const saved = window.localStorage.getItem(PREFERENCE_KEY);
+    return saved === null ? true : saved === 'true';
   } catch {
-    return false;
+    return true;
   }
 }
 
@@ -30,14 +32,16 @@ type AudioSession = {
 
 export function useAudio() {
   const [preferred, setPreferred] = useState(readPreference);
-  // A persisted preference is never permission to start a new session.
-  const [authorized, setAuthorized] = useState(false);
+  const [authorized, setAuthorized] = useState(() => readPreference());
   const [available, setAvailable] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const enabled = preferred && authorized;
-  const enabledRef = useRef(false);
-  const authorizedRef = useRef(false);
+  const enabledRef = useRef(enabled);
+  const authorizedRef = useRef(authorized);
   const sessionRef = useRef<AudioSession | null>(null);
+
+  enabledRef.current = enabled;
+  authorizedRef.current = authorized;
 
   useEffect(() => {
     let disposed = false;
@@ -57,6 +61,33 @@ export function useAudio() {
       return;
     }
 
+    let gestureBound = false;
+    const unlockOnGesture = () => {
+      if (disposed || !enabledRef.current) return;
+      setAuthorized(true);
+      authorizedRef.current = true;
+      setError(null);
+      session.startMusic();
+    };
+
+    const bindFirstGesture = () => {
+      if (gestureBound || disposed) return;
+      gestureBound = true;
+      const cleanupGesture = () => {
+        window.removeEventListener('pointerdown', onGesture);
+        window.removeEventListener('touchstart', onGesture);
+        window.removeEventListener('keydown', onGesture);
+      };
+      const onGesture = () => {
+        cleanupGesture();
+        gestureBound = false;
+        unlockOnGesture();
+      };
+      window.addEventListener('pointerdown', onGesture, { once: true, passive: true });
+      window.addEventListener('touchstart', onGesture, { once: true, passive: true });
+      window.addEventListener('keydown', onGesture, { once: true });
+    };
+
     const session: AudioSession = {
       music: null,
       effects: {},
@@ -64,7 +95,8 @@ export function useAudio() {
       startMusic: () => {
         if (disposed || !enabledRef.current || !authorizedRef.current || document.hidden) return;
         const music = session.music;
-        if (!music || music.state() !== 'loaded' || music.playing()) return;
+        if (!music || music.playing()) return;
+        if (music.state() === 'unloaded') return;
         clearTimeout(session.pauseTimer);
         music.volume(0);
         music.play();
@@ -82,25 +114,32 @@ export function useAudio() {
         loop: true,
         volume: 0,
         onload: () => session.startMusic(),
+        onplay: () => {
+          if (!disposed) setError(null);
+        },
         onloaderror: () => reportError('Music could not be loaded. You can continue without sound.', true),
         onplayerror: () => {
           if (disposed) return;
-          enabledRef.current = false;
-          setAuthorized(false);
           session.music?.pause();
-          reportError('Playback was blocked. Click Enable music to try again.');
+          // Browser blocked autoplay before gesture: start automatically on first tap/click/key.
+          bindFirstGesture();
         },
       });
       sounds.push(session.music);
+
+      // Attempt immediate playback if browser permits autoplay on open
+      if (enabledRef.current) {
+        bindFirstGesture();
+        session.startMusic();
+      }
+
       for (const effect of EFFECTS) {
         const sound = new Howl({
           src: [`/audio/${effect}.wav`],
           volume: effect === 'chime' ? 0.25 : 0.35,
           onloaderror: () => {
             session.failedEffects.add(effect);
-            reportError(`The ${effect} sound could not be loaded. The story will continue without it.`);
           },
-          onplayerror: () => reportError(`The ${effect} sound could not play. The story will continue without it.`),
         });
         session.effects[effect] = sound;
         sounds.push(sound);
@@ -115,7 +154,7 @@ export function useAudio() {
       if (document.hidden) {
         session.music?.pause();
         for (const sound of Object.values(session.effects)) sound.stop();
-      } else {
+      } else if (enabledRef.current) {
         session.startMusic();
       }
     };
@@ -126,7 +165,6 @@ export function useAudio() {
       clearTimeout(session.pauseTimer);
       document.removeEventListener('visibilitychange', onVisibilityChange);
       if (sessionRef.current === session) sessionRef.current = null;
-      // Only unload this hook's sounds, never another consumer's Howler audio.
       for (const sound of sounds) sound.unload();
     };
   }, []);
@@ -135,7 +173,6 @@ export function useAudio() {
     const session = sessionRef.current;
     const music = session?.music;
     if (!session || !music || !available) return;
-    // When supported, reject programmatic calls outside an active user gesture.
     if (navigator.userActivation?.isActive === false) return;
     const next = !enabledRef.current;
     authorizedRef.current = true;
@@ -164,7 +201,6 @@ export function useAudio() {
     const session = sessionRef.current;
     if (!isSoundEffect(effect) || !session || !enabledRef.current || !authorizedRef.current || document.hidden) return;
     const sound = session.effects[effect];
-    // Do not queue effects while loading: late playback would be out of context.
     if (!sound || session.failedEffects.has(effect) || sound.state() !== 'loaded') return;
     sound.stop();
     sound.play();

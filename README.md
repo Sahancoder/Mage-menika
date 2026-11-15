@@ -62,3 +62,4 @@ All photographs are configured in a single typed array in [`src/data/memories.ts
    - **Build Command**: `npm run build`
    - **Output Directory**: `dist`
 4. Click **Deploy** — no backend, database, or paid API keys are required.
+

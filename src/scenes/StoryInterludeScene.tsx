@@ -132,3 +132,4 @@ export function StoryInterludeScene({ onContinue }: StoryInterludeSceneProps) {
     </section>
   );
 }
+

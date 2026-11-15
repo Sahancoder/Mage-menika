@@ -67,3 +67,4 @@ export const memoryPhotos: MemoryPhoto[] = RAW_MEMORY_FILES.map((item, index) =>
 export function getOrderedMemories(photos: MemoryPhoto[] = memoryPhotos): MemoryPhoto[] {
   return [...photos].sort((a, b) => a.order - b.order);
 }
+
