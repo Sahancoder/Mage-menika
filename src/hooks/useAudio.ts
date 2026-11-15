@@ -61,31 +61,22 @@ export function useAudio() {
       return;
     }
 
-    let gestureBound = false;
-    const unlockOnGesture = () => {
+    // Browsers only allow sound after a "real" activation (click / touchend / keydown).
+    // pointerdown & touchstart do NOT count on touch devices, so listen for the right events
+    // and keep listening until the music is actually playing.
+    const GESTURE_EVENTS = ['click', 'touchend', 'pointerup', 'keydown'] as const;
+    const onGesture = () => {
       if (disposed || !enabledRef.current) return;
-      setAuthorized(true);
       authorizedRef.current = true;
+      setAuthorized(true);
       setError(null);
       session.startMusic();
     };
-
-    const bindFirstGesture = () => {
-      if (gestureBound || disposed) return;
-      gestureBound = true;
-      const cleanupGesture = () => {
-        window.removeEventListener('pointerdown', onGesture);
-        window.removeEventListener('touchstart', onGesture);
-        window.removeEventListener('keydown', onGesture);
-      };
-      const onGesture = () => {
-        cleanupGesture();
-        gestureBound = false;
-        unlockOnGesture();
-      };
-      window.addEventListener('pointerdown', onGesture, { once: true, passive: true });
-      window.addEventListener('touchstart', onGesture, { once: true, passive: true });
-      window.addEventListener('keydown', onGesture, { once: true });
+    const unbindGesture = () => {
+      for (const evt of GESTURE_EVENTS) window.removeEventListener(evt, onGesture, true);
+    };
+    const bindGesture = () => {
+      for (const evt of GESTURE_EVENTS) window.addEventListener(evt, onGesture, true);
     };
 
     const session: AudioSession = {
@@ -115,21 +106,23 @@ export function useAudio() {
         volume: 0,
         onload: () => session.startMusic(),
         onplay: () => {
-          if (!disposed) setError(null);
+          if (disposed) return;
+          setError(null);
+          unbindGesture();
         },
         onloaderror: () => reportError('Music could not be loaded. You can continue without sound.', true),
         onplayerror: () => {
           if (disposed) return;
           session.music?.pause();
           // Browser blocked autoplay before gesture: start automatically on first tap/click/key.
-          bindFirstGesture();
+          bindGesture();
         },
       });
       sounds.push(session.music);
 
       // Attempt immediate playback if browser permits autoplay on open
       if (enabledRef.current) {
-        bindFirstGesture();
+        bindGesture();
         session.startMusic();
       }
 
@@ -164,6 +157,7 @@ export function useAudio() {
       disposed = true;
       clearTimeout(session.pauseTimer);
       document.removeEventListener('visibilitychange', onVisibilityChange);
+      unbindGesture();
       if (sessionRef.current === session) sessionRef.current = null;
       for (const sound of sounds) sound.unload();
     };
