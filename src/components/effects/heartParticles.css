@@ -1,0 +1,41 @@
+.heart-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.heart-particle {
+  position: absolute;
+  bottom: -24px;
+  display: block;
+  will-change: transform, opacity;
+  animation: float-heart-up linear infinite;
+}
+
+@keyframes float-heart-up {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.85) rotate(-8deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.32;
+  }
+  50% {
+    transform: translate3d(var(--drift, 14px), -45vh, 0) scale(1) rotate(8deg);
+  }
+  85% {
+    opacity: 0.24;
+  }
+  100% {
+    transform: translate3d(calc(var(--drift, 14px) * -0.6), -95vh, 0) scale(0.9) rotate(-6deg);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heart-particle {
+    display: none;
+  }
+}

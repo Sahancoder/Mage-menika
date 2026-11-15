@@ -1,0 +1,234 @@
+@import "tailwindcss";
+
+:root {
+  /* Core Vintage Love Letters Palette */
+  --old-paper: #F4E8D3;
+  --antique-ivory: #FFF9F0;
+  --dusty-rose: #E5B6AA;
+  --rose-gold: #C89983;
+  --sepia: #A67C52;
+  --ink-brown: #764D45;
+  --deep-wine: #462D30;
+  --dark-mahogany: #2F2020;
+
+  /* Aliases for shared components */
+  --paper: var(--old-paper);
+  --ivory: var(--antique-ivory);
+  --ink: var(--deep-wine);
+  --wine: var(--deep-wine);
+  --rose: var(--dusty-rose);
+
+  /* Typography */
+  --font-sinhala-serif: "Noto Serif Sinhala", "Iskoola Pota", Georgia, serif;
+  --font-sinhala-sans: "Noto Sans Sinhala", system-ui, -apple-system, sans-serif;
+  --font-display: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+
+  /* Shadows & Borders */
+  --shadow-paper: 0 18px 42px -12px rgba(47, 32, 32, 0.24), 0 4px 12px rgba(47, 32, 32, 0.12);
+  --shadow-polaroid: 0 14px 30px -8px rgba(47, 32, 32, 0.28), 0 2px 6px rgba(47, 32, 32, 0.14);
+  --shadow-wax: 0 6px 14px rgba(47, 32, 32, 0.38), inset 0 2px 4px rgba(255, 249, 240, 0.22);
+  --border-vintage: 1px solid rgba(166, 124, 82, 0.34);
+
+  /* Subtle paper grain data URI */
+  --paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--dark-mahogany);
+  color: var(--deep-wine);
+  font-family: var(--font-sinhala-serif);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background-color: var(--dark-mahogany);
+  color: var(--deep-wine);
+  line-height: 1.85;
+  overflow-x: clip;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Focus visibility for keyboard & screen reader accessibility */
+:focus-visible {
+  outline: 2px solid var(--rose-gold);
+  outline-offset: 3px;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* Paper & Desk Surfaces */
+.surface-desk {
+  background:
+    radial-gradient(ellipse at 50% 35%, rgba(200, 153, 131, 0.16) 0%, transparent 62%),
+    radial-gradient(circle at 20% 80%, rgba(166, 124, 82, 0.1) 0%, transparent 50%),
+    linear-gradient(180deg, #241717 0%, var(--dark-mahogany) 55%, #372526 100%);
+  color: var(--antique-ivory);
+}
+
+.surface-parchment {
+  position: relative;
+  background-color: var(--old-paper);
+  background-image:
+    var(--paper-grain),
+    radial-gradient(ellipse at 50% 20%, rgba(255, 249, 240, 0.72) 0%, rgba(244, 232, 211, 0.4) 65%, rgba(166, 124, 82, 0.18) 100%);
+  color: var(--deep-wine);
+}
+
+.parchment-sheet {
+  position: relative;
+  background-color: var(--antique-ivory);
+  background-image:
+    var(--paper-grain),
+    linear-gradient(160deg, rgba(255, 249, 240, 0.96) 0%, rgba(244, 232, 211, 0.92) 100%);
+  border: 1px solid rgba(166, 124, 82, 0.32);
+  box-shadow: var(--shadow-paper);
+}
+
+.parchment-sheet::after {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border: 1px solid rgba(166, 124, 82, 0.16);
+  pointer-events: none;
+}
+
+/* Typography utilities */
+.font-display-en {
+  font-family: var(--font-display);
+  letter-spacing: 0.14em;
+}
+
+.font-sinhala-sans {
+  font-family: var(--font-sinhala-sans);
+}
+
+.story-scene {
+  position: relative;
+  width: 100%;
+  scroll-margin-top: 1rem;
+}
+
+/* Vintage primary button */
+.vintage-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 48px;
+  padding: 0.75rem 1.65rem;
+  border-radius: 999px;
+  border: 1px solid rgba(166, 124, 82, 0.55);
+  background: linear-gradient(180deg, var(--antique-ivory) 0%, var(--old-paper) 100%);
+  color: var(--deep-wine);
+  font-size: 0.98rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  box-shadow: 0 8px 20px -8px rgba(47, 32, 32, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, background-color 0.22s ease;
+}
+
+.vintage-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px -8px rgba(47, 32, 32, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+.vintage-btn:active {
+  transform: translateY(0);
+}
+
+.vintage-btn--dark {
+  background: linear-gradient(180deg, #56373b 0%, var(--deep-wine) 100%);
+  border-color: rgba(200, 153, 131, 0.45);
+  color: var(--antique-ivory);
+  box-shadow: 0 10px 24px -8px rgba(0, 0, 0, 0.5);
+}
+
+.vintage-btn--dark:hover {
+  background: linear-gradient(180deg, #634045 0%, #4e3236 100%);
+}
+
+/* Audio control floating pill */
+.audio-control {
+  position: fixed;
+  top: max(0.85rem, env(safe-area-inset-top));
+  right: max(0.85rem, env(safe-area-inset-right));
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.35rem;
+}
+
+.audio-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 40px;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(200, 153, 131, 0.42);
+  background: rgba(47, 32, 32, 0.78);
+  backdrop-filter: blur(8px);
+  color: var(--antique-ivory);
+  font-family: var(--font-sinhala-sans);
+  font-size: 0.78rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.audio-toggle:hover:not(:disabled) {
+  background: rgba(70, 45, 48, 0.92);
+  transform: translateY(-1px);
+}
+
+.audio-toggle:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.audio-status {
+  max-width: 14rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: 0.5rem;
+  background: rgba(47, 32, 32, 0.85);
+  color: var(--dusty-rose);
+  font-family: var(--font-sinhala-sans);
+  font-size: 0.7rem;
+  line-height: 1.35;
+  text-align: right;
+}
+
+.audio-status:empty {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
